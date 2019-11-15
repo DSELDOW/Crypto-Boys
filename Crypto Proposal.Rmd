@@ -1,0 +1,30 @@
+---
+title: "Cryptosporidium Project"
+author: "David Seldow & Gabriel Meyer-Lee"
+date: "11/15/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+This purpose of this document is to highlight the current status of the Cyrptosporidium Life-Cycle Modeling final project for Foundations of Quantitative Reasoning. 
+The scope of this project is to examine current available data on the life cycle dynamics of *Cryptosporidium parvum* within a single host.  
+Brief Introduction draft: *C. parvum* is an apicomplexan obilgate intracellular parasite that is ranked number 2 worldwide by the WHO for causing potentially life-threatening diarrhea and gastrointestinal disease in children (citation). The immunocompromised are also common victims of infection, HIV/AIDS patients being  particularly vulnerable to chronic Cryptosporidiosis (citation) It is also a clinically significant disease in bovine, responsible for debilitating diarrheal infections and causing massive losses in productivity worldwide. In the US alone, over half of all cattle will be naturally infected by a strain of *Cryptosporidium*, making research on this zoonotic parasite of prime importance (citation). Current treatments across all mammals remain ineffective, most likely due to the complexity of the  apicomplexan's life cycle. Though key proteins are being identified for potential vaccine candidates such as glycoprotein 60, a better understanding of the morphology at each stage of the parasite's life is needed.  
+In this paper, we use *in vitro* data from the following sources to create a conceptual model of *C. parvum's* life stages (citations).  
+*more deatail is needed describing what is known about crypto, the different life stages, and the data sets compiled*  
+Data available for life-cycle model*make this a table*  
+Time of infection will be measured in increments of 12 hours  
+4 sporozoites present per oocyte  
+Sporozoites become trophozoites  
+Trophozoites then either become Type I or Type II meronts 
+During initial infection, 80% become Type I meronts(6-8) [asexual reproduction, aka schizonts]  
+The remaining 20% become Type II meronts (4), which will then reproduce sexuall  
+Type II merozoites reproduce to form either one macrogamont or 16-18 microgamonts  
+The joining of one macrogamete and one microgamete cresates a zygote which in turn becomes an oocyst. 
+Below is data taken from a UVM study that experimentally challenged dairy calves with *C. parvum* oocysts and measured shedding as an indication of the severity of infection. 
+*need to put oocyst_shedding.csv into markdown document*
+*update bibliography*
+
+
+
