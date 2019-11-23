@@ -26,5 +26,18 @@ Below is data taken from a UVM study that experimentally challenged dairy calves
 *need to put oocyst_shedding.csv into markdown document*
 *update bibliography*
 
+```{r}
+require(ggplot2)
+shed <- read.csv('gm feces.csv')
+control <- shed[, grepl('Control', names(shed))]
+control['Day'] = c(0:14)
+
+control %>%
+  gather(key=animal, value=shedding, Control:Control.5) %>%
+  ggplot(aes(x=Day, y=shedding, color=animal)) +
+  geom_line() +
+  scale_y_log10()
+```
+
 
 
