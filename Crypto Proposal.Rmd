@@ -39,5 +39,34 @@ control %>%
   scale_y_log10()
 ```
 
+```{r}
+require(ggplot2)
+shed2 <- read.csv('Oocyst shedding_fecal dry matter.csv')
+control2 <- shed2[, grepl('Control', names(shed2))]
+control2['Day'] = c(0:11)
 
+control2 %>%
+  gather(key=animal, value=shedding, Group.1..Control:Group.1..Control.6) %>%
+  ggplot(aes(x=Day, y=shedding, color=animal)) +
+  geom_line() +
+  scale_y_log10()
+```
+
+```{r}
+require(dplyr)
+
+dat <- full_join(control, control2)
+control_combine <- transform(dat, Avg = rowMeans(dat[,-1], na.rm = TRUE))
+
+control_combine %>%
+  gather(key=animal, value=shedding, Avg) %>%
+  ggplot(aes(x=Day, y=shedding, color=animal)) +
+  geom_line() +
+  scale_y_log10()
+```
+
+```{r}
+life_stage <- rbind(c(.8, .4, .2, 0), c(.75, .6, 0, 0), c(.25, 0, 0, 0), c(0, 0, .8, 0))
+
+```
 
