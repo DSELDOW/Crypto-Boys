@@ -66,7 +66,55 @@ control_combine %>%
 ```
 
 ```{r}
-life_stage <- rbind(c(.8, .4, .2, 0), c(.75, .6, 0, 0), c(.25, 0, 0, 0), c(0, 0, .8, 0))
+life_stage <- cbind(c(.8, .75, .25, 0), #sporozoite 
+                    c(3.2, .6, 0, 0), #asexual
+                    c(.8, 0, 0, 3.6), #sexual
+                    c(0, 0, 3.6, 0)) #oocyst
+eigout<-eigen(life_stage)
 
+lambda <- Re(eigout$values[1])
+w <- Re(eigout$vectors[,1])
+leigout <- eigen(t(life_stage))
+v <- Re(leigout$vectors[,1])
+
+sensitivity <- function(v, w){
+  mat = matrix(0, 4, 4)
+  for (i in 1:4){
+    for (j in 1:4){
+      mat[i,j] = v[i]*w[j]/(v %*% w)
+    }
+  }
+  return(mat)
+}
+
+elasticity <- function(A, lambda, v, w){
+  mat = matrix(0, 4, 4)
+  for (i in 1:4){
+    for (j in 1:4){
+      mat[i,j] = (A[i,j]/lambda)*(v[i]*w[j]/(v %*% w))
+    }
+  }
+  return(mat)
+}
+
+sensitivities <- sensitivity(v, w)
+elasticities <- elasticity(life_stage, lambda, v, w)
+w/sum(w)
+
+init <- c(10e3, 0, 0, 0)
+oocyst_out <- c(0)
+val = init
+for (i in 1:14){
+  val = life_stage %*% val
+  oocyst_out <- c(oocyst_out, val[4])
+}
+
+control_combine$Predict <- oocyst_out
+
+control_combine %>%
+  gather(key=animal, value=shedding, c(Avg,Predict)) %>%
+  ggplot(aes(x=Day, y=shedding, color=animal)) +
+  geom_line() +
+  scale_y_log10()
 ```
 
