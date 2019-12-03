@@ -135,3 +135,17 @@ control_combine %>%
   geom_line() +
   scale_y_log10()
 ```
+### References {.css_class}  
+References
+
+Bones, A. J., Jossé, L., More, C., Miller, C. N., Michaelis, M., & Tsaousis, A. D. (2019). Past and future trends of cryptosporidium in vitro research. Experimental Parasitology, 196, 28-37. doi:10.1016/j.exppara.2018.12.001
+
+BOROWSKI, H., THOMPSON, R. C. A., ARMSTRONG, T., & CLODE, P. L. (2010). Morphological characterization of cryptosporidium parvum life-cycle stages in an in vitro model system. Parasitology, 137(1), 13-26. doi:10.1017/S0031182009990837
+
+Journal of Biomedical Research201125(1):1-16.Journal of biomedical Research，2011，25(1):1-16 http://Elsevier.com/wps/ review find/journaldescription.cws_ home/723905/description#description
+
+Michael J. Arrowood. (2002). In vitro cultivation of cryptosporidium species. Clinical Microbiology Reviews, 15(3), 390-400. doi:10.1128/CMR.15.3.390-400.2002
+
+S Yang, M C Healey, C Du, & J Zhang. (1996). Complete development of cryptosporidium parvum in bovine fallopian tube epithelial cells. Infection and Immunity, 64(1), 349-354. Retrieved from http://iai.asm.org/content/64/1/349.abstract
+
+T P Flanigan, T Aji, R Marshall, R Soave, M Aikawa, & C Kaetzel. (1991). Asexual development of cryptosporidium parvum within a differentiated human enterocyte cell line. Infection and Immunity, 59(1), 234-239. Retrieved from http://iai.asm.org/content/59/1/234.abstract
