@@ -117,4 +117,21 @@ control_combine %>%
   geom_line() +
   scale_y_log10()
 ```
+```{r}
+init <- c(10e3, 0, 0, 0)
+oocyst_out <- c(0)
+val2 = init
+for (i in 1:14){
+  val2 = life_stage %*% val2
+  val2[1] <- val2[1] - val2[1]*.2*i
+  oocyst_out <- c(oocyst_out, val2[4])
+}
 
+control_combine$Predict <- oocyst_out
+
+control_combine %>%
+  gather(key=animal, value=shedding, c(Avg,Predict)) %>%
+  ggplot(aes(x=Day, y=shedding, color=animal)) +
+  geom_line() +
+  scale_y_log10()
+```
