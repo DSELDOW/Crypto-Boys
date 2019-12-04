@@ -2,7 +2,9 @@
 title: "Cryptosporidium Project"
 author: "David Seldow & Gabriel Meyer-Lee"
 date: "11/15/2019"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -19,7 +21,7 @@ Time of infection will be measured in increments of 12 hours
 Sporozoites become trophozoites  
 Trophozoites then either become Type I or Type II meronts 
 During initial infection, 80% become Type I meronts(6-8) [asexual reproduction, aka schizonts]  
-The remaining 20% become Type II meronts (4), which will then reproduce sexuall  
+The remaining 20% become Type II meronts (4), which will then reproduce sexually.
 Type II merozoites reproduce to form either one macrogamont or 16-18 microgamonts  
 The joining of one macrogamete and one microgamete cresates a zygote which in turn becomes an oocyst. 
 Below is data taken from a UVM study that experimentally challenged dairy calves with *C. parvum* oocysts and measured shedding as an indication of the severity of infection. 
@@ -29,34 +31,28 @@ Below is data taken from a UVM study that experimentally challenged dairy calves
 ```{r}
 require(ggplot2)
 require(tidyr)
+require(dplyr)
 shed <- read.csv('gm feces.csv')
 control <- shed[, grepl('Control', names(shed))]
 control['Day'] = c(0:14)
 
-control %>%
-  gather(key=animal, value=shedding, Control:Control.5) %>%
-  ggplot(aes(x=Day, y=shedding, color=animal)) +
-  geom_line() +
-  scale_y_log10()
-```
-
-```{r}
 shed2 <- read.csv('Oocyst shedding_fecal dry matter.csv')
 control2 <- shed2[, grepl('Control', names(shed2))]
 control2['Day'] = c(0:11)
 
-control2 %>%
-  gather(key=animal, value=shedding, Group.1..Control:Group.1..Control.6) %>%
+dat <- full_join(control, control2)
+dat %>%
+  gather(key=animal, value=shedding, names(dat[,-7])) %>%
   ggplot(aes(x=Day, y=shedding, color=animal)) +
   geom_line() +
   scale_y_log10()
+
 ```
 
-```{r}
-require(dplyr)
+Taking the average across all trials:
 
-dat <- full_join(control, control2)
-control_combine <- transform(dat, Avg = rowMeans(dat[,-1], na.rm = TRUE))
+```{r}
+control_combine <- transform(dat, Avg = rowMeans(dat[,-7], na.rm = TRUE))
 
 control_combine %>%
   gather(key=animal, value=shedding, Avg) %>%
@@ -66,9 +62,9 @@ control_combine %>%
 ```
 
 ```{r}
-life_stage <- cbind(c(.6, .75, .25, 0), #sporozoite 
-                    c(3.2, 0, 0, 0), #asexual
-                    c(.8, 0, 0, 3.6), #sexual
+life_stage <- cbind(c(.2, .6*7, 0, 0), #sporozoite 
+                    c(.75, 0, 1, 0), #asexual
+                    c(.2*4, 0, 0, .8), #sexual
                     c(0, 0, 0, 0)) #oocyst
 eigout<-eigen(life_stage)
 
@@ -119,16 +115,17 @@ control_combine %>%
 ```
 
 
+Trying density-dependence.
+
 ```{r}
 # Parameters
 max_time = 14
-ii = 0.6
-ia = 0.75
-is = 0.25
-ai = 3.2
-si = 0.8
-so = 3.6
-r = 0.36
+ii = 0.2
+ia = 0.6
+ai = .75
+as = .25
+si = 0.2
+so = 0.8
 K = 10e6
 
 I = vector('numeric',length=max_time)
@@ -142,9 +139,9 @@ O[1] = 0
 
 # Iterate model
 for (t in 1:max_time){
-  I[t+1] = ii*I[t] + ai*A[t] + si*S[t] - r*log(t)*I[t]
-  A[t+1] = ia*I[t]
-  S[t+1] = is*I[t]
+  I[t+1] = ii*I[t] + ai*A[t] + si*4*S[t] 
+  A[t+1] = max(ia*7*I[t]*(1 - (I[t]/K)), 0)
+  S[t+1] = as*4*I[t]
   O[t+1] = so*S[t]
 }
 
@@ -156,6 +153,46 @@ control_combine %>%
   geom_line() +
   scale_y_log10()
 ```
+
+Trying to model development of resistance.
+```{r}
+# Parameters
+max_time = 14
+ii = 0.2
+ia = 0.6
+ai = .75
+as = .25
+si = 0.2
+so = 0.8
+r = 1.5
+K= 10e6
+
+I = vector('numeric',length=max_time)
+A = vector('numeric',length=max_time)
+S = vector('numeric',length=max_time)
+O = vector('numeric',length=max_time)
+I[1] = 10e5
+A[1] = 0
+S[1] = 0
+O[1] = 0
+
+# Iterate model
+for (t in 1:max_time){
+  I[t+1] = ii*I[t] + ai*A[t] + si*4*S[t] 
+  A[t+1] = ia*7*I[t]*(r/t)
+  S[t+1] = as*4*I[t]
+  O[t+1] = so*S[t]
+}
+
+control_combine$Predict <- O
+
+control_combine %>%
+  gather(key=animal, value=shedding, c(Avg,Predict)) %>%
+  ggplot(aes(x=Day, y=shedding, color=animal)) +
+  geom_line() +
+  scale_y_log10()
+```
+
 ### References {.css_class}  
 References
 
