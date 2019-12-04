@@ -28,6 +28,7 @@ Below is data taken from a UVM study that experimentally challenged dairy calves
 
 ```{r}
 require(ggplot2)
+require(tidyr)
 shed <- read.csv('gm feces.csv')
 control <- shed[, grepl('Control', names(shed))]
 control['Day'] = c(0:14)
@@ -40,7 +41,6 @@ control %>%
 ```
 
 ```{r}
-require(ggplot2)
 shed2 <- read.csv('Oocyst shedding_fecal dry matter.csv')
 control2 <- shed2[, grepl('Control', names(shed2))]
 control2['Day'] = c(0:11)
@@ -66,10 +66,10 @@ control_combine %>%
 ```
 
 ```{r}
-life_stage <- cbind(c(.8, .75, .25, 0), #sporozoite 
-                    c(3.2, .6, 0, 0), #asexual
+life_stage <- cbind(c(.6, .75, .25, 0), #sporozoite 
+                    c(3.2, 0, 0, 0), #asexual
                     c(.8, 0, 0, 3.6), #sexual
-                    c(0, 0, 3.6, 0)) #oocyst
+                    c(0, 0, 0, 0)) #oocyst
 eigout<-eigen(life_stage)
 
 lambda <- Re(eigout$values[1])
@@ -101,7 +101,7 @@ sensitivities <- sensitivity(v, w)
 elasticities <- elasticity(life_stage, lambda, v, w)
 w/sum(w)
 
-init <- c(10e3, 0, 0, 0)
+init <- c(10e5, 0, 0, 0)
 oocyst_out <- c(0)
 val = init
 for (i in 1:14){
@@ -117,17 +117,38 @@ control_combine %>%
   geom_line() +
   scale_y_log10()
 ```
+
+
 ```{r}
-init <- c(10e3, 0, 0, 0)
-oocyst_out <- c(0)
-val2 = init
-for (i in 1:14){
-  val2 = life_stage %*% val2
-  val2[1] <- val2[1] - val2[1]*.2*i
-  oocyst_out <- c(oocyst_out, val2[4])
+# Parameters
+max_time = 14
+ii = 0.6
+ia = 0.75
+is = 0.25
+ai = 3.2
+si = 0.8
+so = 3.6
+r = 0.36
+K = 10e6
+
+I = vector('numeric',length=max_time)
+A = vector('numeric',length=max_time)
+S = vector('numeric',length=max_time)
+O = vector('numeric',length=max_time)
+I[1] = 10e5
+A[1] = 0
+S[1] = 0
+O[1] = 0
+
+# Iterate model
+for (t in 1:max_time){
+  I[t+1] = ii*I[t] + ai*A[t] + si*S[t] - r*log(t)*I[t]
+  A[t+1] = ia*I[t]
+  S[t+1] = is*I[t]
+  O[t+1] = so*S[t]
 }
 
-control_combine$Predict <- oocyst_out
+control_combine$Predict <- O
 
 control_combine %>%
   gather(key=animal, value=shedding, c(Avg,Predict)) %>%
