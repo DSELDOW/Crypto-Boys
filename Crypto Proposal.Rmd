@@ -3,19 +3,27 @@ title: "Cryptosporidium Project"
 author: "David Seldow & Gabriel Meyer-Lee"
 date: "11/15/2019"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+#
+
 This purpose of this document is to highlight the current status of the Cyrptosporidium Life-Cycle Modeling final project for the class: Foundations of Quantitative Reasoning. 
 The scope of this project is to model current available data on the life cycle dynamics of *Cryptosporidium parvum* within a single host.  
-**Brief Introduction draft:** *Cryptosporidiosis spp.* are apicomplexan obilgate intracellular parasites that are ranked number 2 worldwide by the WHO for causing diarrhea and gastrointestinal disease in children (citation). Infants and children stricken with the potentially fatal disease, cryptosporidiosis, experience stunted growth and development, significantly lagging behind uninfected peers throughout vital growth periods. Other than children, the immunocompromised are also common victims of infection; HIV/AIDS patients are  particularly vulnerable to chronic cryptosporidiosis (citation). Crypto has the ability to transfer between multiple species, and is responsible for debilitating calf diarrheal infections as well as causing massive losses in productivity worldwide. In the US alone, over half of all cattle will be naturally infected by the strain known as *Cryptosporidium parvum*, making research on this zoonotic parasite of prime importance (citation). Current treatments across all mammals remain ineffective, most likely due to the complexity of the  apicomplexan's life cycle. Though key proteins are being identified for potential vaccine candidates such as glycoprotein 60, a better understanding of the morphology at each stage of the parasite's life is needed.  
+
+# Brief Introduction draft
+
+*Cryptosporidiosis spp.* are apicomplexan obilgate intracellular parasites that are ranked number 2 worldwide by the WHO for causing diarrhea and gastrointestinal disease in children (citation). Infants and children stricken with the potentially fatal disease, cryptosporidiosis, experience stunted growth and development, significantly lagging behind uninfected peers throughout vital growth periods. Other than children, the immunocompromised are also common victims of infection; HIV/AIDS patients are  particularly vulnerable to chronic cryptosporidiosis (citation). Crypto has the ability to transfer between multiple species, and is responsible for debilitating calf diarrheal infections as well as causing massive losses in productivity worldwide. In the US alone, over half of all cattle will be naturally infected by the strain known as *Cryptosporidium parvum*, making research on this zoonotic parasite of prime importance (citation). Current treatments across all mammals remain ineffective, most likely due to the complexity of the  apicomplexan's life cycle. Though key proteins are being identified for potential vaccine candidates such as glycoprotein 60, a better understanding of the morphology at each stage of the parasite's life is needed.  
 In this paper, we use *in vitro* data from the following sources to create a conceptual model of *C. parvum's* life stages (citations). *In vitro* cultures of *C.parvum* provide previously unattainable insight into the complex stages present within a single host. Through modeling of the apicomplexan life cycle, we can identify key areas where the parasite is vulnerable to attack, thus opening up new avenues for treatment and one day, eradication.  
-*more deatail is needed describing what is known about crypto, the different life stages, and the data sets compiled*  
-**Data available for life-cycle model***make this a table*  
+*more deatail is needed describing what is known about crypto, the different life stages, and the data sets compiled* 
+
+# Data available for life-cycle model *make this a table*  
+
 Time of infection will be measured in increments of 12 hours  
 4 sporozoites present per oocyte  
 Sporozoites become trophozoites  
@@ -24,6 +32,10 @@ During initial infection, 80% become Type I meronts(6-8) [asexual reproduction, 
 The remaining 20% become Type II meronts (4), which will then reproduce sexually.
 Type II merozoites reproduce to form either one macrogamont or 16-18 microgamonts  
 The joining of one macrogamete and one microgamete cresates a zygote which in turn becomes an oocyst. 
+
+
+# Data 
+
 Below is data taken from a UVM study that experimentally challenged dairy calves with *C. parvum* oocysts and measured shedding as an indication of the severity of infection. 
 *need to put oocyst_shedding.csv into markdown document*
 *update bibliography*
@@ -60,6 +72,9 @@ control_combine %>%
   geom_line() +
   scale_y_log10()
 ```
+
+
+# Modeling results
 
 ```{r}
 life_stage <- cbind(c(.2, .6*7, 0, 0), #sporozoite 
@@ -192,6 +207,28 @@ control_combine %>%
   geom_line() +
   scale_y_log10()
 ```
+
+# Easton comments
+
+Good work describing the parasite and the major gaps in the literature. The models you describe are certainly appropriate and are potentially really interesting. 
+
+Minor comments:
+
+- I added a few section headers to make the text more readable
+- It is not clear to me how you picked the parameter values.
+- Why not have the same initial conditions as the "Avg" shedding rate?
+- What happens if you put density dependence and resistance in the same model?
+
+
+
+Here is what I need from you for the final project:
+
+- a description of the simple matrix model and what the various parameters mean in the model and where their values come from
+- A brief textual description of the density-dependent and resistance models (does not have to be as detailed as the description of the simple matrix model)
+- some text explaining each figure's main message
+- A short section on next steps
+
+
 
 ### References {.css_class}  
 References
