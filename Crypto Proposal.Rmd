@@ -13,14 +13,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #
 
-This purpose of this document is to highlight the current status of the Cyrptosporidium Life-Cycle Modeling final project for the class: Foundations of Quantitative Reasoning. 
+This purpose of this document is to highlight the current status of the Cryptosporidium Life-Cycle Modeling final project for the class: Foundations of Quantitative Reasoning. 
 The scope of this project is to model current available data on the life cycle dynamics of *Cryptosporidium parvum* within a single host.  
-
-# Brief Introduction draft
-
-*Cryptosporidiosis spp.* are apicomplexan obilgate intracellular parasites that are ranked number 2 worldwide by the WHO for causing diarrhea and gastrointestinal disease in children (citation). Infants and children stricken with the potentially fatal disease, cryptosporidiosis, experience stunted growth and development, significantly lagging behind uninfected peers throughout vital growth periods. Other than children, the immunocompromised are also common victims of infection; HIV/AIDS patients are  particularly vulnerable to chronic cryptosporidiosis (citation). Crypto has the ability to transfer between multiple species, and is responsible for debilitating calf diarrheal infections as well as causing massive losses in productivity worldwide. In the US alone, over half of all cattle will be naturally infected by the strain known as *Cryptosporidium parvum*, making research on this zoonotic parasite of prime importance (citation). Current treatments across all mammals remain ineffective, most likely due to the complexity of the  apicomplexan's life cycle. Though key proteins are being identified for potential vaccine candidates such as glycoprotein 60, a better understanding of the morphology at each stage of the parasite's life is needed.  
-In this paper, we use *in vitro* data from the following sources to create a conceptual model of *C. parvum's* life stages (citations). *In vitro* cultures of *C.parvum* provide previously unattainable insight into the complex stages present within a single host. Through modeling of the apicomplexan life cycle, we can identify key areas where the parasite is vulnerable to attack, thus opening up new avenues for treatment and one day, eradication.  
-*more deatail is needed describing what is known about crypto, the different life stages, and the data sets compiled* 
+*Cryptosporidium spp.* are apicomplexan obligate intracellular parasites that are ranked number 2 worldwide by the WHO for causing diarrhea and gastrointestinal disease in children (Odeniran & Ademola, 2019). Infants and children stricken with the potentially fatal disease, cryptosporidiosis, experience stunted growth and development: often significantly lagging behind uninfected peers throughout vital growth periods. Other than children, the immunocompromised are also common victims of infection; HIV/AIDS patients are  particularly vulnerable to chronic cryptosporidiosis (S Yang, M C Healey, C Du, & J Zhang, 1996). Crypto has the ability to transfer between multiple species and is responsible for debilitating calf diarrheal infections as well as causing massive losses in productivity worldwide. In the US alone, over half of all cattle will be naturally infected by the strain known as *Cryptosporidium parvum*, making research on this zoonotic parasite of prime importance (Odeniran & Ademola, 2019). Current treatments across all mammals remain ineffective, most likely due to the complexity of the  apicomplexan's life cycle. Though key proteins are being identified for potential vaccine candidates such as glycoprotein 60, a better understanding of the morphology at each stage of the parasite's life is needed.  
+In this paper, we use *in vitro* data from the following sources listed in the references to create a conceptual model of *C. parvum's* life stages. *In vitro* cultures of *C. 
+parvum* provide previously unattainable insight into the complex stages present within a single host. Through modeling of the apicomplexan life cycle, we can identify key areas where the parasite is vulnerable to attack, thus opening up new avenues for treatment and one day, eradication. 
 
 # Data available for life-cycle model *make this a table*  
 
@@ -38,7 +35,6 @@ The joining of one macrogamete and one microgamete cresates a zygote which in tu
 
 Below is data taken from a UVM study that experimentally challenged dairy calves with *C. parvum* oocysts and measured shedding as an indication of the severity of infection. 
 *need to put oocyst_shedding.csv into markdown document*
-*update bibliography*
 
 ```{r}
 require(ggplot2)
@@ -61,7 +57,7 @@ dat %>%
 
 ```
 
-Taking the average across all trials:
+The Figure below illustrates the infection status of all cows experimentally challenged with *Cryptosporidium parvum* in the study done by Chris Huston's lab.  
 
 ```{r}
 control_combine <- transform(dat, Avg = rowMeans(dat[,-7], na.rm = TRUE))
@@ -130,7 +126,7 @@ control_combine %>%
 ```
 
 
-Trying density-dependence.
+This model below attempts to incorporate density dependence. This is a vital aspect of the in-host infection cycle as there each sporozoite creates a parasitiphorous vacuole within which it grows into meronts and attains nutrients from the host cell. When the infection reaches a critical mass within the host, there are not enough nutrients to sustain the infection, thus, the density of parasites within the epithelial lining creates a self-limiting factor. 
 
 ```{r}
 # Parameters
@@ -169,7 +165,7 @@ control_combine %>%
   scale_y_log10()
 ```
 
-Trying to model development of resistance.
+Another important factor within the in-host infection cycle is the development of an immune response to the infection. Most infections last 1-2 weeks in immunocompetent individuals due to the body's natural defense systems targeting the parasites. This is what keeps the infection from growing exponentially, though the current model still fails to fully account for the eventual decline in shedding rates and parasite reproduction within the epithelial lining of the host.
 ```{r}
 # Parameters
 max_time = 14
@@ -206,7 +202,9 @@ control_combine %>%
   ggplot(aes(x=Day, y=shedding, color=animal)) +
   geom_line() +
   scale_y_log10()
-```
+```  
+With an organism as complex as the apicomplexan *Cryptosporidium parvum*, it is no wonder that a fully competent model has yet to be created. Here we synthesized data from multiple in-vitro studies in an attempt to mimic the real-world infection cycle of the parasite within a bovine host. Values were gathered to estimate density values at each life stage and the likely number of parasites that would progress to the next stage. Though some values were estimated, the overall model tracks well in comparison with the Huston study in the early stages, even matching certain dips in reproduction due to the days needed for sexual and asexual reproduction to take place. Issues arise when the Huston study infection decreases overtime whereas this model increases exponentially, not being able to fully account for the host organism, immune responses, and density dependence: all of which would heavily influence the infection status.  
+Therefore, future adaptations of this model need to adjust the infection cycle so that exponential growth is inhibited by the host, as even chronic patients cannot physically support such an ever-increasing number of parasites. An adjustment to the density dependence and immune response are a good start, but more research on the host itself is needed. The research surrounding this model exclusively focused on the parasite, nearly missing the negative symbiotic relationship occurring. Values pertaining to the host's internal environment would help in creating a more life-like model of the infection. With an accurate model of the *Cryptosporidium parvum* life-cycle, analysis can be run on the effect of medications on the parasite without the need for expensive research involving multiple calves that will need to be euthanized at the end of the study.
 
 # Easton comments
 
